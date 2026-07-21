@@ -50,8 +50,8 @@ final class AdminMenu
         // only registers this page when FluentCRM is active, so the parent is present.
         $this->hookSuffix = add_submenu_page(
             'fluentcrm-admin',
-            __('Dedup & Merge', 'fluentcrm-dedup-merge'),
-            __('Dedup & Merge', 'fluentcrm-dedup-merge'),
+            __('Dedup & Merge', 'dedup-and-merge-for-fluentcrm'),
+            __('Dedup & Merge', 'dedup-and-merge-for-fluentcrm'),
             OLDEV_FCDEDUP_CAP,
             'fcdm-dedup',
             [$this, 'renderRoot']

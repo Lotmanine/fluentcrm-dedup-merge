@@ -37,7 +37,7 @@ final class Plugin
         $file = $this->file;
         add_action('init', static function () use ($file): void {
             load_plugin_textdomain(
-                'fluentcrm-dedup-merge',
+                'dedup-and-merge-for-fluentcrm',
                 false,
                 dirname(plugin_basename($file)) . '/languages'
             );
@@ -60,7 +60,7 @@ final class Plugin
     public function renderMissingDependencyNotice(): void
     {
         echo '<div class="notice notice-warning"><p>'
-            . esc_html__('FluentCRM Dedup & Merge requires FluentCRM to be active.', 'fluentcrm-dedup-merge')
+            . esc_html__('Dedup and Merge for FluentCRM requires FluentCRM to be active.', 'dedup-and-merge-for-fluentcrm')
             . '</p></div>';
     }
 }

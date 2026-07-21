@@ -1,4 +1,4 @@
-=== FluentCRM Dedup & Merge ===
+=== Dedup and Merge for FluentCRM ===
 Contributors: lotmanine
 Tags: fluentcrm, crm, duplicates, deduplication, merge
 Requires at least: 6.4
@@ -66,4 +66,4 @@ A few things are intentionally scoped for a later release:
 * Initial release: duplicate detection (normalized email, phone, full name), merge with pre-merge safety snapshot, Vue admin, free and Pro split.
 
 == Copyright ==
-FluentCRM Dedup & Merge is copyright 2026 Lotfi O. (OLDEV), https://oldev.site, and is licensed under GPL-2.0-or-later.
+Dedup and Merge for FluentCRM is copyright 2026 Lotfi O. (OLDEV), https://oldev.site, and is licensed under GPL-2.0-or-later.

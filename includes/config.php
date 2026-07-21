@@ -16,4 +16,4 @@ define('OLDEV_FCDEDUP_VERSION', '1.2.0');
 define('OLDEV_FCDEDUP_CAP', 'manage_options');
 define('OLDEV_FCDEDUP_UNDO_TABLE', 'fcdm_undo_journal');
 define('OLDEV_FCDEDUP_REST_NS', 'oldev-fcdedup/v1');
-define('OLDEV_FCDEDUP_TEXTDOMAIN', 'fluentcrm-dedup-merge');
+define('OLDEV_FCDEDUP_TEXTDOMAIN', 'dedup-and-merge-for-fluentcrm');

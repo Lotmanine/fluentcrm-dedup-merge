@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Plugin Name:       FluentCRM Dedup & Merge
+ * Plugin Name:       Dedup and Merge for FluentCRM
  * Plugin URI:        https://github.com/Lotmanine/fluentcrm-dedup-merge
  * Description:       Detect and merge duplicate FluentCRM contacts, reversibly, consolidating tags, lists, and fields onto a survivor.
  * Version:           1.2.0
@@ -11,7 +11,7 @@
  * Author:            Lotfi O.
  * Author URI:        https://oldev.site
  * License:           GPL-2.0-or-later
- * Text Domain:       fluentcrm-dedup-merge
+ * Text Domain:       dedup-and-merge-for-fluentcrm
  * Domain Path:       /languages
  *
  * @author    Lotfi O. (OLDEV) <https://oldev.site>
@@ -61,7 +61,8 @@ if (function_exists('fdm_fs')) {
 
                 $fdm_fs = fs_dynamic_init(array(
                     'id'                  => '35095',
-                    'slug'                => 'fluentcrm-dedup-merge',
+                    'slug'                => 'dedup-and-merge-for-fluentcrm',
+                    'premium_slug'        => 'dedup-and-merge-for-fluentcrm-premium',
                     'type'                => 'plugin',
                     'public_key'          => 'pk_68199d7859210ba40e71a1ff49571',
                     'is_premium'          => false,

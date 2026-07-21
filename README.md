@@ -1,4 +1,4 @@
-# FluentCRM Dedup &amp; Merge
+# Dedup and Merge for FluentCRM
 
 Find and merge duplicate [FluentCRM](https://fluentcrm.com/) contacts, reversibly. Detection is by normalized email, phone, and full name, and every merge writes a full snapshot to an undo journal before anything changes.
 

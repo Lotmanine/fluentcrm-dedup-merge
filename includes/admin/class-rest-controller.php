@@ -69,7 +69,7 @@ class RestController
         $set = (array) $r->get_param('set');
         if (!isset($set['rows']) || !is_array($set['rows']) || count($set['rows']) < 2) {
             return new \WP_REST_Response(
-                ['error' => __('A preview requires a duplicate set of at least two contacts.', 'fluentcrm-dedup-merge')],
+                ['error' => __('A preview requires a duplicate set of at least two contacts.', 'dedup-and-merge-for-fluentcrm')],
                 400
             );
         }
@@ -80,7 +80,7 @@ class RestController
             // A malformed row (e.g. a scalar where a contact array is expected) would
             // otherwise fatal inside preview(); answer a clean 400 instead of a 500.
             return new \WP_REST_Response(
-                ['error' => __('One or more rows in the set are malformed.', 'fluentcrm-dedup-merge')],
+                ['error' => __('One or more rows in the set are malformed.', 'dedup-and-merge-for-fluentcrm')],
                 400
             );
         }
@@ -96,7 +96,7 @@ class RestController
         $res = $this->mergeOneSet($ids, $reason, $strategy, $includeWoo);
         if (empty($res['ok'])) {
             return new \WP_REST_Response(
-                ['error' => $res['error'] ?? __('Merge failed.', 'fluentcrm-dedup-merge')],
+                ['error' => $res['error'] ?? __('Merge failed.', 'dedup-and-merge-for-fluentcrm')],
                 $res['status'] ?? 500
             );
         }
@@ -136,7 +136,7 @@ class RestController
         if (count($ids) < 2 || !in_array($reason, ['email', 'phone', 'name'], true)) {
             return [
                 'ok'     => false,
-                'error'  => __('A merge requires at least two contact ids and a valid reason.', 'fluentcrm-dedup-merge'),
+                'error'  => __('A merge requires at least two contact ids and a valid reason.', 'dedup-and-merge-for-fluentcrm'),
                 'status' => 400,
             ];
         }
@@ -157,7 +157,7 @@ class RestController
             if (DuplicateKey::sharedKey($rows, $reason) === '') {
                 return [
                     'ok'     => false,
-                    'error'  => __('These contacts are no longer a duplicate set. Please re-scan.', 'fluentcrm-dedup-merge'),
+                    'error'  => __('These contacts are no longer a duplicate set. Please re-scan.', 'dedup-and-merge-for-fluentcrm'),
                     'status' => 409,
                 ];
             }
@@ -172,7 +172,7 @@ class RestController
                     'ok'     => false,
                     'error'  => __(
                         'These contacts have different subscription statuses and will not be merged automatically.',
-                        'fluentcrm-dedup-merge'
+                        'dedup-and-merge-for-fluentcrm'
                     ),
                     'status' => 409,
                 ];
@@ -190,7 +190,7 @@ class RestController
             error_log('[fcdm] merge failed after snapshot: ' . $e->getMessage());
             return [
                 'ok'     => false,
-                'error'  => __('The merge could not be completed. See the site error log for details.', 'fluentcrm-dedup-merge'),
+                'error'  => __('The merge could not be completed. See the site error log for details.', 'dedup-and-merge-for-fluentcrm'),
                 'status' => 500,
             ];
         }
