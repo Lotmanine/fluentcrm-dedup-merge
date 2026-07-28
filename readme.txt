@@ -4,7 +4,7 @@ Tags: fluentcrm, crm, duplicates, deduplication, merge
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 8.2
-Stable tag: 1.2.0
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -39,16 +39,30 @@ No. It works with free FluentCRM. FluentCRM must be active, or the plugin shows 
 Nowhere external. Everything stays in your WordPress database. Note that every merge stores a snapshot of the merged contacts (see Privacy below), so a personal-data erasure request for a removed contact should also clear the matching undo-journal rows.
 
 == Privacy ==
-Every merge writes a snapshot to a database table (the undo journal) BEFORE any change, so the merge can be verified and, on Pro, reversed. That snapshot contains the merged contacts' personal data: email, first and last name, phone, tag and list membership, and custom field values. Snapshots are kept until you remove them or delete the plugin. Deleting the plugin (not just deactivating) drops the table and all snapshots. Automatic retention or purging of old snapshots is a later-version feature; until then, if you honor GDPR or CCPA erasure requests, remember that a removed contact's data also lives in the undo journal until the corresponding rows are cleared.
+Every merge writes a snapshot to a database table (the undo journal) BEFORE any change, so the merge can be verified and, on Pro, reversed. That snapshot contains the merged contacts' personal data: email, first and last name, phone, address, date of birth, tag and list membership, and custom field values. If you use the Pro option to move WooCommerce orders, it also records the order ids involved and the billing email each one carried, so the move can be reversed. Snapshots are kept until you remove them or delete the plugin. Deleting the plugin (not just deactivating) drops the table and all snapshots. Automatic retention or purging of old snapshots is a later-version feature; until then, if you honor GDPR or CCPA erasure requests, remember that a removed contact's data also lives in the undo journal until the corresponding rows are cleared.
 
 == Known limitations ==
 A few things are intentionally scoped for a later release:
 
 * Pro restore re-creates removed contacts from the snapshot as NEW records. Their original contact ids, and any history not held in the snapshot (email opens and clicks, automation position, timestamps), are not restored.
 * Bulk merge is synchronous and capped per run (default 50 sets, filterable). Background processing of very large lists is a later-version feature.
-* WooCommerce order history consolidation is a later-version feature.
+* Pro can move a removed contact's GUEST WooCommerce orders onto the surviving contact's WordPress account. It is deliberately narrow: only sets matched on email, only orders placed as a guest, and only the customer on the order. The billing email is never rewritten, because it is printed on an issued invoice. It is refused outright when WooCommerce Subscriptions is active, because a renewal takes its customer from the subscription and not from the original order, so moving orders could not be undone.
+* Reverting a WooCommerce move puts the order rows and download permissions back exactly. It does not put back analytics attribution for an order returning to guest, refund analytics rows, download log history, or anything another plugin did in response. The confirmation screen lists this before you commit.
+* Scan filters are capped per run (default 5000 matching contacts, filterable). A capped result says so rather than looking complete.
 
 == Changelog ==
+= 1.3.0 =
+* Added (Pro): per-field merge. The preview resolves every standard and custom field across the set, fills in anything only one contact has, and asks only where they genuinely disagree, defaulting to the surviving contact's value. A choice names a contact rather than a typed value, so a merge can only ever keep data one of these contacts already had.
+* Added (Pro): choose which contacts in a set to merge and which one to keep, instead of merging the whole set under an automatic survivor.
+* Added (Pro): scan filters. Narrow a scan by status, name, email, phone, created date, tags, lists and custom fields, using one level of AND/OR groups, before any grouping happens. Large scans are capped and the result says when it is partial.
+* Added (Pro): optionally move a removed contact's guest WooCommerce orders onto the surviving contact's WordPress account. Off by default, offered only where it can be done safely and reversed, and refused outright otherwise. See Known limitations.
+* Added: duplicate sets are collapsed into an accordion, so a long scan stays readable.
+* Fixed (Pro): reverting a merge could not clear a custom field that the merge had filled in. The revert reported success while the field kept its merged value.
+* Fixed (Pro): a per-field choice was ignored for any custom field whose name is not plain ASCII, so the merge kept a different value than the one chosen.
+* Fixed (Pro): rescanning could re-include contacts that had been unticked, so Merge all could remove a contact that was excluded on screen.
+* Fixed (Pro): a revert that was refused before changing anything still marked the merge as reverted, leaving it impossible to revert afterwards.
+* Note: the free plan is unchanged in this release.
+
 = 1.2.0 =
 * Added: a merge history panel. Every merge is listed and can be verified (free) or restored (Pro), so a bulk merge's sets are each reachable for undo, not only the last merge.
 * Added (safety): a duplicate set is refused unless every contact shares the same subscription status, so a merge cannot delete the only unsubscribed, bounced, or complained record for an inbox. A uniformly suppressed set still merges.

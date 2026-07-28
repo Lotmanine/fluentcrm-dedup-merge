@@ -2,13 +2,13 @@
 
 Find and merge duplicate [FluentCRM](https://fluentcrm.com/) contacts, reversibly. Detection is by normalized email, phone, and full name, and every merge writes a full snapshot to an undo journal before anything changes.
 
-![Version](https://img.shields.io/badge/version-1.2.0-10b981)
+![Version](https://img.shields.io/badge/version-1.3.0-10b981)
 ![License](https://img.shields.io/badge/license-GPL--2.0--or--later-3b82f6)
 ![WordPress](https://img.shields.io/badge/WordPress-6.4%2B-1e293b)
 ![PHP](https://img.shields.io/badge/PHP-8.2%2B-777bb4)
 ![FluentCRM](https://img.shields.io/badge/requires-FluentCRM-10b981)
 
-> This repository holds the **free** version. The Pro features (one-click restore and bulk merge) are distributed through [Freemius](https://checkout.freemius.com/plugin/35095/plan/57679/). See [Free vs Pro](#free-vs-pro) below.
+> This repository holds the **free** version. The Pro features (per-field merge, contact selection, scan filters, one-click restore, bulk merge, and WooCommerce order moving) are distributed through [Freemius](https://checkout.freemius.com/plugin/35095/plan/57679/). See [Free vs Pro](#free-vs-pro) below.
 
 **Landing page and full details:** https://fluentcrm-dedup.oldev.site
 
@@ -35,7 +35,7 @@ Every match is exact once the noise is normalized away. No fuzzy matching.
 - **Phone:** digits only, with placeholder and repeated-digit junk rejected.
 - **Name:** first and last, both required, case-insensitive.
 
-On merge, the survivor keeps the union of every tag and list, and empty custom fields are gap-filled from the records being removed.
+On merge, the survivor keeps the union of every tag and list, and empty custom fields are gap-filled from the records being removed. Pro goes further and resolves every field across the set, asking you only where the contacts genuinely disagree.
 
 ## Free vs Pro
 
@@ -46,9 +46,19 @@ On merge, the survivor keeps the union of every tag and list, and empty custom f
 | Snapshot before every merge | Yes | Yes |
 | Mixed-status merges refused | Yes | Yes |
 | Merge history with snapshot verification | Yes | Yes |
+| Choose which contacts to merge, and which one to keep | No | Yes |
+| Per-field merge with conflict resolution | No | Yes |
+| Scan filters (status, name, email, phone, date, tags, lists, custom fields) | No | Yes |
 | One-click restore of any merge | No | Yes |
 | Bulk merge of many sets in one action | No | Yes |
+| Move a removed contact's guest WooCommerce orders to the survivor | No | Yes |
 | Updates and support | No | Yes |
+
+**Per-field merge** resolves every standard and custom field across the set. Anything only one contact has is filled in automatically, and you are asked only where the contacts genuinely disagree, with the surviving contact's value as the default. A choice names a contact rather than a value you type, so a merge can only ever keep data one of those contacts already had.
+
+**Scan filters** narrow a scan before any grouping happens, using one level of AND/OR groups, which keeps it workable on large lists.
+
+**WooCommerce order moving** is deliberately narrow: sets matched on email only, guest orders only, and it changes the customer on the order without ever touching the billing email, which is printed on an issued invoice. It is refused outright when WooCommerce Subscriptions is active, because a renewal takes its customer from the subscription rather than the original order and the move could not then be undone.
 
 Pro is 49 USD per year for a single site and 129 USD per year for up to ten sites, with a 14-day free trial and no card required. [Start a trial or view pricing.](https://checkout.freemius.com/plugin/35095/plan/57679/)
 

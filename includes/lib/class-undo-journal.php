@@ -127,6 +127,75 @@ class UndoJournal
         return (int) $affected === 1;
     }
 
+    /**
+     * Hand a claim back, for a restore that refused BEFORE writing anything.
+     *
+     * The claim exists so a restore runs at most once: once contacts have started coming
+     * back a retry could duplicate them, so a mid-flight failure deliberately keeps the
+     * claim and the entry stays spent. That reasoning does not apply to a refusal that
+     * happens before the first write. The WooCommerce revert runs FIRST inside the Restorer
+     * and can refuse outright - WooCommerce deactivated, or an order edited since the merge
+     * - having changed nothing at all. Keeping the claim there burned the entry forever:
+     * the operator fixed the cause, clicked Undo again, lost the claim, and was told the
+     * merge had ALREADY been undone, while the contacts were still deleted and the orders
+     * still sat on the survivor. That is the most misleading state this plugin can produce.
+     *
+     * Guarded on `restored = 1`, so this can only ever hand back a claim that is currently
+     * held. A DB error is loud for the same reason it is loud in claimRestore(): silently
+     * failing to release would strand the entry with nobody aware of it.
+     */
+    public function releaseRestore(int $journalId): void
+    {
+        // Table derives from $wpdb->prefix and $journalId is a typed int; nothing user-controlled is interpolated.
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        $affected = $this->wpdb->query("UPDATE {$this->table()} SET restored = 0 WHERE id = {$journalId} AND restored = 1");
+        if ($affected === false) {
+            throw new SnapshotException(
+                'Failed to release the undo-journal claim after a restore that wrote nothing; the entry may be stranded.'
+            );
+        }
+    }
+
+    /**
+     * Drop the `woo` section from an entry and put its schema back to 3.
+     *
+     * Called by the merge when the order re-point failed and PROVABLY put every order back.
+     * The journal is written before the orders move, because a snapshot taken afterwards is
+     * not a snapshot - so at that point the entry describes a re-point that did not survive.
+     * Left alone, a later restore would read those order ids, find them at customer_id 0
+     * rather than on the survivor, and refuse as drift forever: an entry unrestorable by
+     * construction, over orders that are already exactly where the restore wanted to put
+     * them.
+     *
+     * Only ever called when the rollback is known to have worked. If the put-back itself
+     * failed, some orders really may still be on the survivor and the `woo` section is the
+     * only record of which ones, so it stays.
+     *
+     * Failure here is logged and swallowed by the caller rather than thrown: the merge is
+     * already failing for another reason, and that reason is the one the operator needs.
+     */
+    public function stripWooSection(int $journalId): void
+    {
+        $payload = $this->load($journalId);
+        if ($payload === null || !array_key_exists('woo', $payload)) {
+            return;
+        }
+        unset($payload['woo']);
+        $payload['schema'] = 3;
+
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        $ok = $this->wpdb->update(
+            $this->table(),
+            ['payload' => wp_json_encode_safe($payload)],
+            ['id' => $journalId]
+        );
+        if ($ok === false) {
+            throw new SnapshotException(
+                'Failed to remove the woo section from the undo-journal entry after a rolled-back re-point.'
+            );
+        }
+    }
+
     public function isRestored(int $journalId): bool
     {
         // Table name derives from $wpdb->prefix and $journalId is a typed int; nothing user-controlled is interpolated.
