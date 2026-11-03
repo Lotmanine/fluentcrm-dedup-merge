@@ -76,15 +76,14 @@ Pro is 49 USD per year for a single site and 129 USD per year for up to ten site
 
 ## Author
 
-Built by **Lotfi O.** at **OLDEV**, a WordPress engineering, CRM, and email deliverability practice.
+Built by **Lotfi Otmanine**, senior WordPress developer at [OLDEV](https://oldev.site).
 
 - Website: [oldev.site](https://oldev.site)
-- Plugin page: [fluentcrm-dedup.oldev.site](https://fluentcrm-dedup.oldev.site)
-- LinkedIn: [linkedin.com/in/lotfi-otmanine](https://www.linkedin.com/in/lotfi-otmanine/)
-- Upwork: [upwork.com/freelancers/~01bd748fcb665b90ca](https://www.upwork.com/freelancers/~01bd748fcb665b90ca)
+- Hire me on Upwork: [upwork.com/freelancers/~01bd748fcb665b90ca](https://www.upwork.com/freelancers/~01bd748fcb665b90ca)
+- LinkedIn: [linkedin.com/in/lotfi-otmanine](https://www.linkedin.com/in/lotfi-otmanine)
 - GitHub: [github.com/Lotmanine](https://github.com/Lotmanine)
 
-If you need a CRM cleaned up, migrated, or a custom FluentCRM build, I take that work through the links above.
+Plugin page: [oldev.site/products/dedup-and-merge-for-fluentcrm](https://oldev.site/products/dedup-and-merge-for-fluentcrm/). If you need a CRM cleaned up, migrated, or a custom FluentCRM build, I take that work through the links above.
 
 ## License
 
