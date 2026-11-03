@@ -1,5 +1,7 @@
 # Dedup and Merge for FluentCRM
 
+[![Lint](https://github.com/Lotmanine/fluentcrm-dedup-merge/actions/workflows/lint.yml/badge.svg)](https://github.com/Lotmanine/fluentcrm-dedup-merge/actions/workflows/lint.yml)
+
 Find and merge duplicate [FluentCRM](https://fluentcrm.com/) contacts, reversibly. Detection is by normalized email, phone, and full name, and every merge writes a full snapshot to an undo journal before anything changes.
 
 ![Version](https://img.shields.io/badge/version-1.3.0-10b981)
